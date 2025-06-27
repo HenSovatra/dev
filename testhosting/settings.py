@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -26,7 +26,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 
 
 # Application definition
 
@@ -75,8 +76,7 @@ WSGI_APPLICATION = 'testhosting.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        # Use os.path.join() to combine string paths
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -115,19 +115,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
+STATIC_URL = 'static/'
 
-STATIC_URL = '/static/' # It's good practice to have a trailing slash for URLs
-
-# This is where Django will collect all static files (including admin's) for production.
-# IMPORTANT: DO NOT put files here manually during development.
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# This is for your *project's own* static files that aren't tied to a specific app.
-# Django's `collectstatic` will look here.
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'), # A common folder for project-wide static files
-    # You can add other directories here if you have more
-]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
