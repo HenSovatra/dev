@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-p3oih$7tjie@et*=-#a*!7l^wyw%@=fn3(7j+_0zs=a&$3^b6d'
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -75,7 +75,8 @@ WSGI_APPLICATION = 'testhosting.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        # Use os.path.join() to combine string paths
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -114,14 +115,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # This is where collectstatic will put files
 
-# If you have static files within your apps (e.g., myapp/static/)
+STATIC_URL = '/static/' # It's good practice to have a trailing slash for URLs
+
+# This is where Django will collect all static files (including admin's) for production.
+# IMPORTANT: DO NOT put files here manually during development.
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# This is for your *project's own* static files that aren't tied to a specific app.
+# Django's `collectstatic` will look here.
 STATICFILES_DIRS = [
-    # os.path.join(BASE_DIR, 'static'), # If you have a project-level 'static' folder
+    os.path.join(BASE_DIR, 'static'), # A common folder for project-wide static files
+    # You can add other directories here if you have more
 ]
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
